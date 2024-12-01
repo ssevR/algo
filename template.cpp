@@ -20,7 +20,7 @@ using namespace std;
 const int N = 2e5 + 10;
 const ll LINF = 1e18;
 const int INF = 1e9;
-const ld PI = 4*atan((ld)1);
+const ld PI = 4*atanl(1);
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1};
  
 int main() {
