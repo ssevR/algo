@@ -1,14 +1,6 @@
-#include <algorithm>
-#include <iostream>
-#include <vector>
-
-
 //source: https://cp-algorithms.com/sequences/longest_increasing_subsequence.html
 //checker: https://judge.yosupo.jp/problem/longest_increasing_subsequence
-
-using namespace std;
-
-const int INF = 1e9 + 100;
+//const int INF = 1e9 + 100;
 
 // return indexes
 vector<int> calc_lis(const vector<int>& x) {
@@ -43,27 +35,4 @@ vector<int> calc_lis(const vector<int>& x) {
     reverse(lis.begin(), lis.end());
 
     return lis;
-}
-
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-
-    int n;
-    cin >> n;
-    vector<int> a(n);
-    for (int i = 0; i < n; ++i) {
-        cin >> a[i];
-    }
-
-    auto res = calc_lis(a);
-
-    cout << res.size() << '\n';
-    for (auto x : res) {
-        cout << x << ' ';
-    }
-    cout << '\n';
-
-    return 0;
 }
