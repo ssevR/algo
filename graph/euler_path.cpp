@@ -1,71 +1,49 @@
-//returns empty vector if path doesnt exist
-//directed graph
-//no multi edges!!
-vector<int> find_euler_path(const vector<vector<int> > & g) {
-    int n = (int)g.size();
-
-    vector<unordered_set<int> > gs(n);
+// for undirected graphs finds path from s to t
+vector<int> find_euler_path(vector<vector<pii>> &g, int n, int m, int s, int t) {
+    vector<int> indeg(n, 0), outdeg(n, 0);
     for (int i = 0; i < n; ++i) {
-        for (auto u : g[i]) {
-            gs[i].insert(u);
+        for (auto &edge : g[i]) {
+            int u = edge.first;
+            outdeg[i]++;
+            indeg[u]++;
         }
     }
-
-    int st = -1;
-    int cnt_odd = 0;
-    int cnt_edges = 0;
-
-
+    if (outdeg[s] != indeg[s] + 1)
+        return {};
+    if (indeg[t] != outdeg[t] + 1)
+        return {};
     for (int i = 0; i < n; ++i) {
-        if (g[i].size() % 2) {
-            ++cnt_odd;
-            st = i;
-        }
-        cnt_edges += g[i].size();
+        if (i == s || i == t) continue;
+        if (indeg[i] != outdeg[i])
+            return {};
     }
-    cnt_edges /= 2;
 
-    if (cnt_odd > 2) {
-        return vector<int>();
-    }
-    else if (st == -1) {
-        for (int i = 0; i < n; ++i) {
-            if (g[i].size()) {
-                st = i;
-                break;
+    vector<int> path;
+    vector<int> used(m, 0); 
+    stack<int> st;
+    st.push(s);
+    while (!st.empty()) {
+        int v = st.top();
+        if (!g[v].empty()) {
+            auto [u, idx] = g[v].back();
+            g[v].pop_back();
+            if (!used[idx]) {
+                used[idx] = 1;
+                st.push(u);
             }
-        }
-        if (st == -1) {
-            return vector<int>();
-        }
-
-    }
-
-    stack<int> s;
-    s.push(0);
-    vector<int> res;
-    while(!s.empty()) {
-        int v = s.top();
-        bool found_edge = false;
-        for (auto u : gs[v]) {
-
-            s.push(u);
-            found_edge = true;
-            gs[v].erase(u);
-            gs[u].erase(v);
-            break;
-        }
-        if (!found_edge) {
-            s.pop();
-            res.push_back(v);
+        } else {
+            path.push_back(v);
+            st.pop();
         }
     }
 
-    if (res.size() == cnt_edges + 1) {
-        return res;
-    }
-    else {
-        return vector<int>();
-    }
+    if (path.size() != m + 1)
+        return {};
 
+    reverse(path.begin(), path.end());
+    if (path.back() != t)
+        return {};
+
+    return path;
 }
+

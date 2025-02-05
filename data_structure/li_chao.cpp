@@ -1,11 +1,11 @@
-struct li_chao {
-    struct line {
-        ll k, b;
-        ll operator()(const ll x) const {
-            return x * k + b;
-        }
-    };
+struct line {
+    ll k, b;
+    ll operator()(const ll x) const {
+        return x * k + b;
+    }
+};
 
+struct li_chao {
     vector<line> tree;
     int size;
     int shift;
