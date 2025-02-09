@@ -6,7 +6,7 @@ ll number_of_inversions(const vector<int>& perm) {
 
     ll res = 0;
     for (int i = 0; i < n; ++i) {
-        res += fw.sum(perm[i], 0);
+        res += fw.sum(perm[i], n);
         fw.add(perm[i], 1);
     }
 
