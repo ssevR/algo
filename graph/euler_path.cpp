@@ -1,5 +1,8 @@
-// for undirected graphs finds path from s to t
-vector<int> find_euler_path(vector<vector<pii>> &g, int n, int m, int s, int t) {
+// for directed graphs finds path from s to t
+// edges indexes should be < m
+vector<int> find_euler_path(vector<vector<pii>> &g) {
+	int n = g.size();
+	int m = 0;
     vector<int> indeg(n, 0), outdeg(n, 0);
     for (int i = 0; i < n; ++i) {
         for (auto &edge : g[i]) {
@@ -7,11 +10,29 @@ vector<int> find_euler_path(vector<vector<pii>> &g, int n, int m, int s, int t) 
             outdeg[i]++;
             indeg[u]++;
         }
+		m += g[i].size();
     }
-    if (outdeg[s] != indeg[s] + 1)
-        return {};
-    if (indeg[t] != outdeg[t] + 1)
-        return {};
+	int s = -1, t = -1;
+	for (int i = 0; i < n; ++i)
+		if (outdeg[i] == indeg[i] + 1) {
+			s = i;
+			break;
+		}
+	for (int i = 0; i < n; ++i) 
+		if (outdeg[i] + 1 == indeg[i]) {
+			t = i;
+			break;
+		}
+	if (s == -1 || t == -1) {
+		for (int i = 0; i < n; ++i)
+			if (indeg[i] == outdeg[i]) {
+				s = t = i;
+				break;
+			}
+		if (s == -1) return {};
+	}
+
+
     for (int i = 0; i < n; ++i) {
         if (i == s || i == t) continue;
         if (indeg[i] != outdeg[i])
