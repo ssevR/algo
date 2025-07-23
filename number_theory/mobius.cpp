@@ -16,10 +16,8 @@ void sieve_calc() {
         cur /= prime[i];
         if (cur % prime[i] == 0) {
             mu[i] = 0;
-        }
-        else {
-            mu[i] = mu[cur];
+        } else {
+            mu[i] = -mu[cur];
         }
     }
 }
-
