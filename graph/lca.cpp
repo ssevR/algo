@@ -1,11 +1,11 @@
-template <typename T, T (*f)(T, T), T(*e)()> struct sparse_tree {
+template <typename T, T (*f)(T, T), T(*e)()> struct sparse_table{
     int n;
     int k;
     vector<vector<T> > st;
     int log2_floor(unsigned long long i) {
         return i ? __builtin_clzll(1) - __builtin_clzll(i) : -1;
     }
-    sparse_tree(const vector<T>& a) {
+    sparse_table(const vector<T>& a) {
         n = a.size();
         k = log2_floor(n) + 1;
         st = vector(k, vector<T>(n, e()));
@@ -38,7 +38,7 @@ pair<int, int> e() {
 struct lca {
 	vector<vector<int> > g;
 	int n;
-	unique_ptr<struct sparse_tree<pair<int, int>, f, e> > st;
+	unique_ptr<struct sparse_table<pair<int, int>, f, e> > st;
 	vector<pair<int, int> > euler_path;
 	vector<int> used, lvl, tin;
 	int tim = 0;
@@ -67,7 +67,7 @@ struct lca {
 		tin.assign(n, 0);
 		euler_path.reserve(2 * n - 1);
 		dfs(0);
-		st = make_unique<sparse_tree<pair<int, int>, f, e> > (euler_path);
+		st = make_unique<sparse_table<pair<int, int>, f, e> > (euler_path);
 	}
 	int find_lca(int a, int b) {
 		if (tin[a] > tin[b])
