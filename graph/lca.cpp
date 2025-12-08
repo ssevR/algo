@@ -36,14 +36,13 @@ pair<int, int> e() {
 
 
 struct lca {
-	vector<vector<int> > g;
 	int n;
 	unique_ptr<struct sparse_table<pair<int, int>, f, e> > st;
 	vector<pair<int, int> > euler_path;
 	vector<int> used, lvl, tin;
 	int tim = 0;
 
-	void dfs(int v) {
+	void dfs(int v, const vector<vector<int> >& g) {
 		used[v] = 1;
 		euler_path.emplace_back(lvl[v], v);
 		tin[v] = tim++;
@@ -51,7 +50,7 @@ struct lca {
 		for (auto u : g[v])
 			if (!used[u]) {
 				lvl[u] = lvl[v] + 1;
-		    	dfs(u);
+		    	dfs(u, g);
 				euler_path.emplace_back(lvl[v], v);
 				tin[v] = tim++;
 
@@ -59,14 +58,14 @@ struct lca {
 
 	};
 
-	lca(const vector<vector<int> >& ng) : g(ng) {
+	lca(const vector<vector<int> >& g) {
 		tim = 0;
 		n = g.size();
 		used.assign(n, 0);
 		lvl.assign(n, 0);
 		tin.assign(n, 0);
 		euler_path.reserve(2 * n - 1);
-		dfs(0);
+		dfs(0, g);
 		st = make_unique<sparse_table<pair<int, int>, f, e> > (euler_path);
 	}
 	int find_lca(int a, int b) {
