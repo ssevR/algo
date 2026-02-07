@@ -1,4 +1,4 @@
-//find euler_path in undirected graph
+//find euler_edge_path in undirected graph
 vector<int> find_euler_path(vector<vector<pii> > g) {
 	int n = g.size();
 	int m = 0;
@@ -11,7 +11,7 @@ vector<int> find_euler_path(vector<vector<pii> > g) {
 	m /= 2;
 
 	if (s == -1) return vector<int>();
-    vector<int> path;
+    vector<int> edge_path;
     vector<int> used(m);
 
 	int cnt_odd = 0;
@@ -20,8 +20,9 @@ vector<int> find_euler_path(vector<vector<pii> > g) {
 	if (cnt_odd > 2) return vector<int>();
 
 
-    stack<int> st;
+    stack<int> st, edge_st;
 	st.push(s);
+	edge_st.push(-1);
 
     while(!st.empty()) {
         int v = st.top();
@@ -31,14 +32,18 @@ vector<int> find_euler_path(vector<vector<pii> > g) {
             if (!used[idx]) {
                 used[idx] = 1;
                 st.push(u);
+				edge_st.push(idx);
             }
         }
         else {
-            path.push_back(v);
             st.pop();
+			int e = edge_st.top();
+			edge_st.pop();
+			if (e != -1) edge_path.push_back(e);
         }
     }
-    if (path.size() != m + 1)
-        path.clear();
-    return path;
+    if (edge_path.size() != m)
+        edge_path.clear();
+    return edge_path;
 }
+

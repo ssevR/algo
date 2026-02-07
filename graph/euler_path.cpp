@@ -1,6 +1,6 @@
 // for directed graphs finds path from s to t
-// edges indexes should be < m
-vector<int> find_euler_path(vector<vector<pii>> &g) {
+// edge indexes should be < m
+vector<int> find_euler_path(vector<vector<pii>> g) {
 	int n = g.size();
 	int m = 0;
     vector<int> indeg(n, 0), outdeg(n, 0);
