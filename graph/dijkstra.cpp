@@ -10,7 +10,7 @@ vector<T> dij(int st, vector<vector<pair<int, T> > >& g, T inf) {
         auto [d, v] = q.top();
         q.pop();
 
-        if (dist[v] < LINF)
+        if (dist[v] < inf)
             continue;
         dist[v] = d;
 
