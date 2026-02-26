@@ -106,7 +106,7 @@ template <class T> struct fenwick_tree {
   public:
     fenwick_tree() : _n(0) {}
     explicit fenwick_tree(int n) : _n(n), data(n) {
-		_m = floor(log2(_n));
+		_m = (_n > 0 ? 31 - __builtin_clz(_n) : 0);
 	}
 
     void add(int p, T x) {
