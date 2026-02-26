@@ -1,4 +1,3 @@
-
 #include <cassert>
 #include <vector>
 
@@ -106,9 +105,12 @@ template <class T> struct fenwick_tree {
 
   public:
     fenwick_tree() : _n(0) {}
-    explicit fenwick_tree(int n) : _n(n), data(n) {}
+    explicit fenwick_tree(int n) : _n(n), data(n) {
+		_m = floor(log2(_n));
+	}
 
     void add(int p, T x) {
+		all_sum += x;
         assert(0 <= p && p < _n);
         p++;
         while (p <= _n) {
@@ -122,9 +124,29 @@ template <class T> struct fenwick_tree {
         return sum(r) - sum(l);
     }
 
+	//assume that all elements of fw are non negative
+	//find minimum r such that fw.sum(0, r) > k
+	int find_by_order(T k) {
+		T sum = 0;
+		int res = 0;
+		assert(all_sum > k);
+
+		for (int i = (1 << _m); i; i >>= 1) {
+			if (res + i <= _n && sum + data[res + (i - 1)] <= k) {
+				sum += data[res + (i - 1)];
+				res += i;
+			}
+		}
+		return res;
+	}
+
+	
+
   private:
     int _n;
+	int _m;
     std::vector<U> data;
+	T all_sum = T(0);
 
     U sum(int r) {
         U s = 0;
@@ -146,4 +168,6 @@ using namespace atcoder;
 fenwick_tree<long long> fw(n);
 fw.add(i, a);
 fw.sum(l, r);
+fw.find_by_order(k) (finds index of k-th number
 */
+
