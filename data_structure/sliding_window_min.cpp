@@ -1,6 +1,6 @@
 //INF = 1e9
 struct sliding_window_min{
-    vector<int> l, r;
+    stack<int> l, r;
     int rmin;
     
     sliding_window(){
@@ -8,25 +8,27 @@ struct sliding_window_min{
     }
     
     void push_back(int x){
-        r.push_back(x);
+        r.push(x);
         rmin = min(rmin, x);
     }
     
     void pop_front(){
         if(l.empty()){
-            for(int mn = INF; !r.empty();){
-                mn = min(mn, r.back());
-                l.push_back(mn);
-                r.pop_back();
+            int mn = INF;
+            while(!r.empty()){
+                mn = min(mn, r.top());
+                l.push(mn);
+                r.pop();
             }
             rmin = INF;
         }
-        l.pop_back();
+        l.pop();
     }
     
     int get_min(){
         int res = rmin;
-        if(!l.empty()) res = min(res, l.back());
+        if(!l.empty()) res = min(res, l.top());
         return res;
     }
 };
+
