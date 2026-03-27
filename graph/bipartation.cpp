@@ -1,4 +1,5 @@
-bool is_bipartite(const vector<vector<int>>&g) {
+// if graph is not bipartite return empty vector
+vector<int> bipartition(const vector<vector<int>>&g) {
 	vector<int> colors(g.size(), -1);
 
 	auto dfs = [&](int v, auto&& dfs) -> bool{
@@ -17,8 +18,8 @@ bool is_bipartite(const vector<vector<int>>&g) {
 	for (int i = 0; i < g.size(); ++i)
 		if (colors[i] == -1) {
 			colors[i] = 0;
-			if (!dfs(i, dfs)) return false;
+			if (!dfs(i, dfs)) return {};
 		}
 
-	return true;
+	return colors;
 }
