@@ -1,13 +1,14 @@
+template<typename T> 
 struct persistent_segtree {
 	int n;
 	struct Node {
-		ll sum = 0;
+		T sum = 0;
 		shared_ptr<Node> left;
 		shared_ptr<Node> right;
 	};
 	vector<shared_ptr<Node> > roots;
 
-	shared_ptr<Node> build(const vector<int>& v, int l, int r) {
+	shared_ptr<Node> build(const vector<T>& v, int l, int r) {
 		shared_ptr<Node> cur(new Node);
 		if (l + 1 == r) {
 			cur.get()->sum = v[l];
@@ -26,7 +27,7 @@ struct persistent_segtree {
 
 
 	};
-	shared_ptr<Node> update(shared_ptr<Node> cur, int i, int lx, int rx, int x) {
+	shared_ptr<Node> update(shared_ptr<Node> cur, int i, int lx, int rx, T x) {
 		if (lx + 1 == rx) {
 			cur.get()->sum = x;
 			return cur;
@@ -50,20 +51,37 @@ struct persistent_segtree {
 		}
 		return cur;
 	}
-	int update(int ind, int i, int x) {
+	int update(int ind, int i, T x) {
 		auto new_root = make_shared<Node>(*roots[ind]);
 
 		update(new_root, i, 0, n, x);
 		roots.push_back(new_root);
 		return roots.size() - 1;
 	}
+	T find_sum(shared_ptr<Node> root, int l, int r, int lx, int rx) {
+		int L = max(l, lx);
+		int R = min(r, rx);
+		if (L >= R)
+			return 0;
+		if (l <= lx && rx <= r) {
+			return root.get()->sum;
+		}
+		int mx = (lx + rx) / 2;
+		return find_sum(root.get()->left, l, r, lx, mx) + find_sum(root.get()->right, l, r, mx, rx);
+	}
+	T find_sum(int ind, int l, int r) {
+		return find_sum(roots[ind], l, r, 0, n);
+	}
 
 
-	persistent_segtree(const vector<int>& a) {
+
+	persistent_segtree(const vector<T>& a) {
 		n = a.size();
 
 		int l = 0, r = n;
 		roots.push_back(build(a, 0, n));
 	};
 
+
 };
+
